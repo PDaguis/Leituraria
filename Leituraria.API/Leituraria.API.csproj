@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Leituraria.Infra\Leituraria.Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\Results\" />
+  </ItemGroup>
+
 </Project>

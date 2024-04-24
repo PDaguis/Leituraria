@@ -11,9 +11,8 @@ namespace Leituraria.Core.Entities
         public required DateTime AlugadoEm { get; set; }
         public required DateTime DevolverEm { get; set; }
         public Cliente Cliente { get; set; }
-        public ICollection<Livro> Livros { get; set; }
         public int ClienteId { get; set; }
-        public int LivroId { get; set; }
+        public ICollection<Livro> Livros { get; set; }
 
         public decimal ObterValorTotal()
         {

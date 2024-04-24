@@ -1,4 +1,6 @@
+using Leituraria.Core.Interfaces;
 using Leituraria.Infra.Context;
+using Leituraria.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,12 +16,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var stringConexao = configuration.GetConnectionString("ConnectionStringSql");
+var stringConexao = configuration.GetConnectionString("ConnectionString");
 
 builder.Services.AddDbContext<ApplicationDbContext>( opt =>
 {
     opt.UseSqlServer(stringConexao);
 }, ServiceLifetime.Scoped);
+
+builder.Services.AddScoped<IAluguelRepository, AluguelRepository>();
+builder.Services.AddScoped<IAutorRepository, AutorRepository>();
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+builder.Services.AddScoped<ILivroRepository, LivroRepository>();
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 
 var app = builder.Build();
 

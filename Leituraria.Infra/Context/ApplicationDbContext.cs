@@ -1,5 +1,6 @@
 ﻿using Leituraria.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,12 @@ namespace Leituraria.Infra.Context
 
         public ApplicationDbContext()
         {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
 
+            _connectionString = configuration.GetConnectionString("ConnectionString");
         }
 
         public ApplicationDbContext(string connectionString)
