@@ -11,7 +11,7 @@ namespace Leituraria.Core.Entities
         public required string Nome { get; set; }
         public required string Descricao { get; set; }
         public DateTime? DataNascimento { get; set; }
-        public ICollection<Livro>? Livros { get; set; }
+        public virtual ICollection<Livro>? Livros { get; set; }
         public string? Imagem { get; set; }
     }
 }

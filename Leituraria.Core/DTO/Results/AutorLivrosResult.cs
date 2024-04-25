@@ -1,13 +1,15 @@
 ﻿using Leituraria.Core.Entities;
 
-namespace Leituraria.API.DTO.Inputs
+namespace Leituraria.Core.DTO.Results
 {
-    public class AutorPut
+    public class AutorLivrosResult
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public DateTime? DataNascimento { get; set; }
+        public ICollection<Livro>? Livros { get; set; }
         public string? Imagem { get; set; }
+        public int Id { get; set; }
+        public DateTime CadastradoEm { get; set; }
     }
 }

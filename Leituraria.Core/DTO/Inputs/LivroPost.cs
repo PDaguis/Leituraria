@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Leituraria.Core.Entities;
 
-namespace Leituraria.Core.Entities
+namespace Leituraria.Core.DTO.Inputs
 {
-    public class Livro : EntityBase
+    public class LivroPost
     {
         public required string Titulo { get; set; }
         public required DateTime DataPublicacao { get; set; }
@@ -16,10 +12,6 @@ namespace Leituraria.Core.Entities
         public required string Descricao { get; set; }
         public required int QuantidadePaginas { get; set; }
         public required decimal Valor { get; set; }
-
-        public virtual Autor Autor { get; set; }
         public int AutorId { get; set; }
-
-        public virtual ICollection<Aluguel>? Alugueis { get; set; }
     }
 }

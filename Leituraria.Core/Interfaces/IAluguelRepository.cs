@@ -9,5 +9,6 @@ namespace Leituraria.Core.Interfaces
 {
     public interface IAluguelRepository : IGenericRepository<Aluguel>
     {
+        Aluguel ObterComLivros(int id);
     }
 }

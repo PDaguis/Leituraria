@@ -18,22 +18,51 @@ namespace Leituraria.API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public IActionResult GetBYId([FromRoute] int id)
         {
+            try
+            {
+                var livro = _livroRepository.GetById(id);
 
+                if (livro == null)
+                    return NotFound();
 
-            return Ok();
+                return Ok(livro);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public IActionResult GetAll()
         {
+            try
+            {
+                var livros = _livroRepository.GetAll();
 
+                if (livros == null)
+                    return NotFound();
 
-            return Ok();
+                return Ok(livros);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public IActionResult Post([FromBody] LivroPost input)
         {
             try
@@ -53,7 +82,7 @@ namespace Leituraria.API.Controllers
 
                 _livroRepository.Cadastrar(livro);
 
-                return Ok();
+                return Created();
             }
             catch (Exception e)
             {
@@ -62,9 +91,35 @@ namespace Leituraria.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put()
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult Put([FromBody] LivroPut input)
         {
-            return Ok();
+            try
+            {
+                var livro = _livroRepository.GetById(input.Id);
+
+                if (livro == null)
+                    return NotFound();
+
+                livro.Titulo = input.Titulo;
+                livro.DataPublicacao = input.DataPublicacao;
+                livro.Isbn10 = input.Isbn10;
+                livro.Isbn13 = input.Isbn13;
+                livro.Idioma = input.Idioma;
+                livro.Descricao = input.Descricao;
+                livro.QuantidadePaginas = input.QuantidadePaginas;
+                livro.Valor = input.Valor;
+
+                _livroRepository.Atualizar(livro);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         [HttpDelete]

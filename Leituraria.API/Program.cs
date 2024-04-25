@@ -21,6 +21,7 @@ var stringConexao = configuration.GetConnectionString("ConnectionString");
 builder.Services.AddDbContext<ApplicationDbContext>( opt =>
 {
     opt.UseSqlServer(stringConexao);
+    opt.UseLazyLoadingProxies();
 }, ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<IAluguelRepository, AluguelRepository>();

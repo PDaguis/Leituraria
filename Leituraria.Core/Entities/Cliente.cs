@@ -12,7 +12,7 @@ namespace Leituraria.Core.Entities
         public required string Email { get; set; }
         public required string Cpf { get; set; }
         public DateTime? DataNascimento { get; set; }
-        public ICollection<Endereco>? Enderecos { get; set; }
-        public ICollection<Aluguel>? Alugueis { get; set; }
+        public virtual ICollection<Endereco>? Enderecos { get; set; }
+        public virtual ICollection<Aluguel>? Alugueis { get; set; }
     }
 }

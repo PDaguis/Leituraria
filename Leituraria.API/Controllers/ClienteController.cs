@@ -1,6 +1,8 @@
 ﻿using Leituraria.API.DTO.Inputs;
+using Leituraria.API.DTO.Results;
 using Leituraria.Core.Entities;
 using Leituraria.Core.Interfaces;
+using Leituraria.Infra.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +10,13 @@ namespace Leituraria.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AutorController : ControllerBase
+    public class ClienteController : ControllerBase
     {
-        private readonly IAutorRepository _autorRepository;
+        private readonly IClienteRepository _clienteRepository;
 
-        public AutorController(IAutorRepository autorRepository)
+        public ClienteController(IClienteRepository clienteRepository)
         {
-            _autorRepository = autorRepository;
+            _clienteRepository = clienteRepository;
         }
 
         [HttpGet("{id:int}")]
@@ -25,12 +27,12 @@ namespace Leituraria.API.Controllers
         {
             try
             {
-                var autor = _autorRepository.GetById(id);
+                var cliente = _clienteRepository.GetById(id);
 
-                if (autor == null)
+                if (cliente == null)
                     return NotFound();
 
-                return Ok(autor);
+                return Ok(cliente);
             }
             catch (Exception e)
             {
@@ -38,20 +40,20 @@ namespace Leituraria.API.Controllers
             }
         }
 
-        [HttpGet("{id:int}/livros")]
+        [HttpGet("{id:int}/alugueis")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult ObterLivrosPorAutor([FromRoute] int id)
+        public IActionResult ObterAlugueisPorCliente([FromRoute] int id)
         {
             try
             {
-                var autor = _autorRepository.ObterLivrosPorAutor(id);
+                var cliente = _clienteRepository.ObterAlugueisPorCliente(id);
 
-                if (autor == null)
+                if (cliente == null)
                     return NotFound();
 
-                return Ok(autor);
+                return Ok(cliente);
             }
             catch (Exception e)
             {
@@ -67,12 +69,27 @@ namespace Leituraria.API.Controllers
         {
             try
             {
-                var autores = _autorRepository.GetAll();
+                var clienteResult = new List<ClienteResult>();
 
-                if (autores == null)
+                var clientes = _clienteRepository.GetAll();
+
+                foreach (var cliente in clientes)
+                {
+                    clienteResult.Add(new ClienteResult()
+                    {
+                        Id = cliente.Id,
+                        CadastradoEm = cliente.CadastradoEm,
+                        Nome = cliente.Nome,
+                        Email = cliente.Email,
+                        Cpf = cliente.Cpf,
+                        DataNascimento = cliente.DataNascimento
+                    });
+                }
+
+                if (clientes == null)
                     return NotFound();
 
-                return Ok(autores);
+                return Ok(clientes);
             }
             catch (Exception e)
             {
@@ -84,19 +101,19 @@ namespace Leituraria.API.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody] AutorPost input)
+        public IActionResult Post([FromBody] ClientePost input)
         {
             try
             {
-                var autor = new Autor() 
-                { 
+                var autor = new Cliente()
+                {
                     Nome = input.Nome,
-                    Descricao = input.Descricao,
-                    DataNascimento = input.DataNascimento,
-                    Imagem = input.Imagem
+                    Email = input.Email,
+                    Cpf = input.Cpf,
+                    DataNascimento = input.DataNascimento
                 };
 
-                _autorRepository.Cadastrar(autor);
+                _clienteRepository.Cadastrar(autor);
 
                 return Created();
             }
@@ -110,21 +127,21 @@ namespace Leituraria.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Put([FromBody] AutorPut input)
+        public IActionResult Put([FromBody] ClientePut input)
         {
             try
             {
-                var autor = _autorRepository.GetById(input.Id);
+                var cliente = _clienteRepository.GetById(input.Id);
 
-                if (autor == null)
+                if (cliente == null)
                     return NotFound();
 
-                autor.Nome = input.Nome;
-                autor.Descricao = input.Descricao;
-                autor.DataNascimento = input.DataNascimento;
-                autor.Imagem = input.Imagem;
+                cliente.Nome = input.Nome;
+                cliente.Email = input.Email;
+                cliente.Cpf = input.Cpf;
+                cliente.DataNascimento = input.DataNascimento;
 
-                _autorRepository.Atualizar(autor);
+                _clienteRepository.Atualizar(cliente);
 
                 return Ok();
             }
@@ -142,12 +159,12 @@ namespace Leituraria.API.Controllers
         {
             try
             {
-                var autor = _autorRepository.GetById(id);
+                var autor = _clienteRepository.GetById(id);
 
-                if(autor == null)
+                if (autor == null)
                     return NotFound();
 
-                _autorRepository.Excluir(id);
+                _clienteRepository.Excluir(id);
 
                 return Ok();
             }

@@ -34,6 +34,7 @@ namespace Leituraria.Infra.Repositories
         public void Atualizar(T entidade)
         {
             _dbSet.Update(entidade);
+            _context.SaveChanges();
         }
 
         public void Cadastrar(T entidade)

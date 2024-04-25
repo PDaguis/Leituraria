@@ -2,12 +2,11 @@
 
 namespace Leituraria.API.DTO.Inputs
 {
-    public class AutorPut
+    public class ClientePost
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
-        public string Descricao { get; set; }
+        public string Email { get; set; }
+        public string Cpf { get; set; }
         public DateTime? DataNascimento { get; set; }
-        public string? Imagem { get; set; }
     }
 }

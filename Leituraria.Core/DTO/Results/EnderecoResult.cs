@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Leituraria.Core.Entities;
 
-namespace Leituraria.Core.Entities
+namespace Leituraria.Core.DTO.Results
 {
-    public class Endereco : EntityBase
+    public class EnderecoResult
     {
+        public int Id { get; set; }
+        public DateTime CadastradoEm { get; set; }
         public required string Rua { get; set; }
         public string? Numero { get; set; }
         public required string Bairro { get; set; }
@@ -17,8 +15,7 @@ namespace Leituraria.Core.Entities
         public required string Pais { get; set; }
         public string? Complemento { get; set; }
 
-        public virtual Cliente Cliente { get; set; }
+        public Cliente Cliente { get; set; }
         public int ClienteId { get; set; }
-
     }
 }

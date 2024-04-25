@@ -9,5 +9,6 @@ namespace Leituraria.Core.Interfaces
 {
     public interface IAutorRepository : IGenericRepository<Autor>
     {
+        Autor ObterLivrosPorAutor(int id);
     }
 }

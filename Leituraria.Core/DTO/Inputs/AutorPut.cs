@@ -1,6 +1,6 @@
 ﻿using Leituraria.Core.Entities;
 
-namespace Leituraria.API.DTO.Inputs
+namespace Leituraria.Core.DTO.Inputs
 {
     public class AutorPut
     {
