@@ -32,7 +32,22 @@ namespace Leituraria.API.Controllers
                 if (livro == null)
                     return NotFound();
 
-                return Ok(livro);
+                var livroResult = new LivroResult()
+                {
+                    Id = livro.Id,
+                    CadastradoEm = livro.CadastradoEm,
+                    Titulo = livro.Titulo,
+                    DataPublicacao = livro.DataPublicacao,
+                    Isbn10 = livro.Isbn10,
+                    Isbn13 = livro.Isbn13,
+                    Idioma = livro.Idioma,
+                    Descricao = livro.Descricao,
+                    QuantidadePaginas = livro.QuantidadePaginas,
+                    Valor = livro.Valor.ToString(),
+                    Imagem = livro.Imagem
+                };
+
+                return Ok(livroResult);
             }
             catch (Exception e)
             {
@@ -138,10 +153,25 @@ namespace Leituraria.API.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult Delete()
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
         {
-            return Ok();
+            try
+            {
+                var livro = _livroRepository.GetById(id);
+
+                if (livro == null)
+                    return NotFound();
+
+                _livroRepository.Excluir(id);
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

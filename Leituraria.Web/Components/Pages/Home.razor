@@ -1,9 +1,11 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using Leituraria.Web.DTO;
+@using System.Diagnostics
 @inject Interfaces.ILivroService livroService;
+@inject NavigationManager navigationManager;
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Home - Leituraria</PageTitle>
 
 <h1>Bem vindo ao Leituraria!</h1>
 
@@ -23,6 +25,8 @@ else
                 <th>Quantidade de páginas</th>
                 <th>Valor</th>
                 <th>Imagem</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -34,10 +38,49 @@ else
                     <td>@livro.QuantidadePaginas</td>
                     <td>@livro.Valor</td>
                     <td><img src="@livro.Imagem" style="width:48px;height:48px;" /> </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="(async () => await Editar(livro.Id))">Editar</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary">Alugar</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <CardGroup>
+        <Card Class="mb-4" Style="width:18rem;">
+            <img src="/images/placeholder.png" alt="placeholder" />
+            <CardBody>
+                <CardTitle>Card title</CardTitle>
+                <CardText>This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</CardText>
+            </CardBody>
+            <CardFooter>
+                <small class="text-muted">Last updated 3 mins ago</small>
+            </CardFooter>
+        </Card>
+        <Card Class="mb-4" Style="width:18rem;">
+            <img src="/images/placeholder.png" alt="placeholder" />
+            <CardBody>
+                <CardTitle>Card title</CardTitle>
+                <CardText>This card has supporting text below as a natural lead-in to additional content.</CardText>
+            </CardBody>
+            <CardFooter>
+                <small class="text-muted">Last updated 3 mins ago</small>
+            </CardFooter>
+        </Card>
+        <Card Class="mb-4" Style="width:18rem;">
+            <img src="/images/placeholder.png" alt="placeholder" />
+            <CardBody>
+                <CardTitle>Card title</CardTitle>
+                <CardText>This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</CardText>
+            </CardBody>
+            <CardFooter>
+                <small class="text-muted">Last updated 3 mins ago</small>
+            </CardFooter>
+        </Card>
+    </CardGroup>
 }
 
 @code {
@@ -48,5 +91,10 @@ else
         await Task.Delay(500);
 
         livros = await livroService.GetLivros();
+    }
+
+    private async Task Editar(int id)
+    {
+        navigationManager.NavigateTo($"/livro-detalhe/{id}");
     }
 }

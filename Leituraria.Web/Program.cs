@@ -1,15 +1,27 @@
+using Auth0.AspNetCore.Authentication;
 using Leituraria.Web.Components;
 using Leituraria.Web.Interfaces;
 using Leituraria.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped(hc => new HttpClient { BaseAddress = new Uri("http://localhost:5011/") });
+builder.Services.AddBlazorBootstrap();
+
+builder.Services.AddScoped(hc => new HttpClient { BaseAddress = new Uri(builder.Configuration["BaseAddress"]) });
 builder.Services.AddScoped<ILivroService, LivroService>();
+builder.Services.AddAuth0WebAppAuthentication(opt =>
+{
+    opt.Domain = builder.Configuration["Auth0:Domain"];
+    opt.ClientId = builder.Configuration["Auth0:ClientId"];
+});
 
 var app = builder.Build();
 

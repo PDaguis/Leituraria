@@ -47,6 +47,7 @@ namespace Leituraria.Infra.Repositories
         public void Excluir(int id)
         {
             _dbSet.Remove(GetById(id));
+            _context.SaveChanges();
         }
     }
 }

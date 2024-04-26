@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leituraria.Infra", "Leitura
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leituraria.API", "Leituraria.API\Leituraria.API.csproj", "{49933B9D-CE4C-41E4-AFF8-8DE08537BD2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leituraria.Web", "Leituraria.Web\Leituraria.Web.csproj", "{0F103330-0017-421D-AF56-952DA1198ED7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leituraria.Web", "Leituraria.Web\Leituraria.Web.csproj", "{0F103330-0017-421D-AF56-952DA1198ED7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

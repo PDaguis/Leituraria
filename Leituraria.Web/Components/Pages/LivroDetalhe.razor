@@ -1,0 +1,71 @@
+﻿@page "/livro-detalhe/{id:int}";
+@using Leituraria.Web.DTO
+@rendermode InteractiveServer
+@inject Interfaces.ILivroService livroService;
+@inject NavigationManager navigationManager;
+
+<h3>Livro Detalhe</h3>
+
+<h3>@Livro.Id</h3>
+<h3>@Livro.Titulo</h3>
+<h3>@Livro.DataPublicacao</h3>
+<h3>@Livro.Isbn10</h3>
+<h3>@Livro.Isbn13</h3>
+<h3>@Livro.QuantidadePaginas</h3>
+
+<Modal @ref="modal" Title="@Livro.Titulo">
+    <BodyTemplate>
+        Tem certeza que deseja excluir esse livro?
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Fechar</Button>
+        <Button Color="ButtonColor.Primary" @onclick="(async () => await ExcluirLivro(Livro.Id))">Sim</Button>
+    </FooterTemplate>
+</Modal>
+
+<Button Color="ButtonColor.Danger" @onclick="OnShowModalClick">Excluir</Button>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public LivroResult Livro { get; set; } = new LivroResult();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var livro = await livroService.GetById(Id);
+
+        if (livro == null)
+            navigationManager.NavigateTo("/");
+
+        Livro.Id = livro.Id;
+        Livro.Titulo = livro.Titulo;
+        Livro.DataPublicacao = livro.DataPublicacao;
+        Livro.Isbn10 = livro.Isbn10;
+        Livro.Isbn13 = livro.Isbn13;
+        Livro.QuantidadePaginas = livro.QuantidadePaginas;
+    }
+
+    private Modal modal = default!;
+    private string? message;
+
+    private async Task OnShowModalClick()
+    {
+        await modal?.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal?.HideAsync();
+    }
+
+    private async Task ExcluirLivro(int id)
+    {
+        var response = livroService.Excluir(id);
+
+        await modal?.HideAsync();
+
+        if (response)
+            navigationManager.Refresh();
+    }
+}
