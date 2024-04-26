@@ -1,8 +1,12 @@
 ﻿using Leituraria.Web.DTO;
 using Leituraria.Web.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Leituraria.Web.Services
 {
@@ -13,6 +17,25 @@ namespace Leituraria.Web.Services
         public LivroService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public bool Cadastrar(LivroResult livroResult)
+        {
+            try
+            {
+                var jsonRequest = new StringContent(JsonSerializer.Serialize(livroResult), Encoding.UTF8, Application.Json);
+
+                var response = _httpClient.PostAsync("/Livro", jsonRequest).Result.EnsureSuccessStatusCode();
+
+                if (response.IsSuccessStatusCode)
+                    return true;
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool Excluir(int id)
@@ -42,6 +65,7 @@ namespace Leituraria.Web.Services
         public async Task<IEnumerable<LivroResult>> GetLivros()
         {
             var response = await _httpClient.GetAsync("Livro");
+
 
             if (!response.IsSuccessStatusCode)
                 return null;

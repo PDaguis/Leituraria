@@ -1,8 +1,10 @@
 ﻿using Leituraria.API.DTO.Inputs;
+using Leituraria.Core.DTO.Results;
 using Leituraria.Core.Entities;
 using Leituraria.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace Leituraria.API.Controllers
 {
@@ -67,12 +69,25 @@ namespace Leituraria.API.Controllers
         {
             try
             {
+                var lista = new List<AutorResult>();
                 var autores = _autorRepository.GetAll();
 
                 if (autores == null)
                     return NotFound();
 
-                return Ok(autores);
+                foreach (var item in autores)
+                {
+                    lista.Add(new AutorResult()
+                    {
+                        Id = item.Id,
+                        Nome = item.Nome,
+                        Descricao = item.Descricao,
+                        DataNascimento = item.DataNascimento,
+                        Imagem = item.Imagem
+                    });
+                }
+
+                return Ok(lista);
             }
             catch (Exception e)
             {

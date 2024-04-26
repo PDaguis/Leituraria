@@ -3,6 +3,7 @@
 @using Leituraria.Web.DTO;
 @using System.Diagnostics
 @inject Interfaces.ILivroService livroService;
+@inject Interfaces.IAutorService autorService;
 @inject NavigationManager navigationManager;
 
 <PageTitle>Home - Leituraria</PageTitle>
@@ -11,90 +12,132 @@
 
 Sua biblioteca virtual a todo momento.
 
+<Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Cadastrar Livro</Button>
+
+<Modal @ref="modal" Title="Modal title">
+    <BodyTemplate>
+        Cadastre aqui o seu livro
+        <form method="post" @formname="autor-cadastrar-form" @onsubmit="Submit">
+            
+            <div>
+                <label for="nome">Nome
+                    <InputText @bind-Value="Model.Titulo" class="form-control"/>
+                </label>
+            </div>
+
+            <div>
+                <label for="descricao">Descrição
+                    <InputText @bind-Value="Model.Descricao" class="form-control" />
+                </label>
+            </div>
+
+            <div>
+                <label for="dataNascimento">Data de Nascimento
+                    <InputDate @bind-Value="Model.DataPublicacao" class="form-control" />
+                </label>
+            </div>
+
+            <div>
+                <label for="imagem">Imagem
+                    <InputFile @bind-Value="Model.ImagemFile" class="form-control"/>
+                </label>
+            </div>
+
+            <div>
+                <AutoComplete @bind-Value="autorId"
+                              TItem="AutorResult"
+                              DataProvider="AutorDataProvider"
+                              PropertyName="Nome"
+                              Placeholder="Selecione um autor"
+                              OnChanged="(AutorResult autorResult) => OnAutoCompleteChanged(autorResult)" />
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+                <AntiforgeryToken />
+            </div>
+        </form>
+        
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Close</Button>
+        <Button Color="ButtonColor.Primary">Save changes</Button>
+    </FooterTemplate>
+</Modal>
+
 @if (livros == null)
 {
     <p><em>Carregando...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Descrição</th>
-                <th>Quantidade de páginas</th>
-                <th>Valor</th>
-                <th>Imagem</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var livro in livros)
-            {
-                <tr>
-                    <td>@livro.Titulo</td>
-                    <td>@livro.Descricao</td>
-                    <td>@livro.QuantidadePaginas</td>
-                    <td>@livro.Valor</td>
-                    <td><img src="@livro.Imagem" style="width:48px;height:48px;" /> </td>
-                    <td>
-                        <button class="btn btn-primary" @onclick="(async () => await Editar(livro.Id))">Editar</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary">Alugar</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <CardGroup>
+   @foreach (var livro in livros)
+    {
         <Card Class="mb-4" Style="width:18rem;">
-            <img src="/images/placeholder.png" alt="placeholder" />
+            <img src="@livro.Imagem" alt="placeholder" />
             <CardBody>
-                <CardTitle>Card title</CardTitle>
-                <CardText>This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</CardText>
+                <CardTitle><a href="#" @onclick="(async () => await ShowLivroDetalhe(livro.Id))" style="text-decoration:none; color:black">@livro.Titulo</a></CardTitle>
+                <CardText>@livro.Descricao</CardText>
             </CardBody>
             <CardFooter>
-                <small class="text-muted">Last updated 3 mins ago</small>
+                <small class="text-muted">Publicado em: @livro.DataPublicacao.ToString("dd/MM/yyyy")</small>
             </CardFooter>
         </Card>
-        <Card Class="mb-4" Style="width:18rem;">
-            <img src="/images/placeholder.png" alt="placeholder" />
-            <CardBody>
-                <CardTitle>Card title</CardTitle>
-                <CardText>This card has supporting text below as a natural lead-in to additional content.</CardText>
-            </CardBody>
-            <CardFooter>
-                <small class="text-muted">Last updated 3 mins ago</small>
-            </CardFooter>
-        </Card>
-        <Card Class="mb-4" Style="width:18rem;">
-            <img src="/images/placeholder.png" alt="placeholder" />
-            <CardBody>
-                <CardTitle>Card title</CardTitle>
-                <CardText>This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</CardText>
-            </CardBody>
-            <CardFooter>
-                <small class="text-muted">Last updated 3 mins ago</small>
-            </CardFooter>
-        </Card>
-    </CardGroup>
+    }
 }
 
 @code {
-    private IEnumerable<LivroResult> livros;
+    private IEnumerable<LivroResult>? livros;
+    private IEnumerable<AutorResult>? autores;
+    public string? autorId;
+
+    [SupplyParameterFromForm]
+    public LivroResult? Model { get; set; }
+
+    private Modal? modal;
 
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(500);
 
         livros = await livroService.GetLivros();
+        autores = await autorService.GetAutores();
+
+        Model = new();
     }
 
-    private async Task Editar(int id)
+    private void Submit()
+    {
+        var teste = Model.Id;
+    }
+
+    private async Task<AutoCompleteDataProviderResult<AutorResult>> AutorDataProvider(AutoCompleteDataProviderRequest<AutorResult> request)
+   {
+        if(autores is null)
+            autores = await autorService.GetAutores();
+
+        return await Task.FromResult(request.ApplyTo(autores.OrderBy(autor => autor.Nome)));
+    }
+
+    private async Task ShowLivroDetalhe(int id)
     {
         navigationManager.NavigateTo($"/livro-detalhe/{id}");
+    }
+
+    private async Task OnShowModalClick()
+    {
+        await modal?.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal?.HideAsync();
+    }
+
+    private void OnAutoCompleteChanged(AutorResult autorResult)
+    {
+        // TODO: handle your own logic
+
+        // NOTE: do null check
+        Console.WriteLine($"'{autorResult?.Nome}' selecionado.");
     }
 }

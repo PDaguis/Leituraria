@@ -25,11 +25,18 @@
 
 <Button Color="ButtonColor.Danger" @onclick="OnShowModalClick">Excluir</Button>
 
+@* <div class="mb-3">
+    <DateInput TValue="DateOnly" @bind-Value="@date1" Placeholder="Enter Date" />
+</div>
+<div class="mb-3">Entered date: @date1</div> *@
+
 @code {
     [Parameter]
     public int Id { get; set; }
 
     public LivroResult Livro { get; set; } = new LivroResult();
+
+    // private DateOnly date1 = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
 
     protected override async Task OnInitializedAsync()
     {

@@ -2,6 +2,7 @@
 using Leituraria.Core.DTO.Results;
 using Leituraria.Core.Entities;
 using Leituraria.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
@@ -66,6 +67,9 @@ namespace Leituraria.API.Controllers
                 var lista = new List<LivroResult>();
                 var livros = _livroRepository.GetAll();
 
+                if (livros == null)
+                    return NotFound();
+
                 foreach (var item in livros)
                 {
                     lista.Add(new LivroResult()
@@ -75,12 +79,10 @@ namespace Leituraria.API.Controllers
                         Descricao = item.Descricao,
                         QuantidadePaginas = item.QuantidadePaginas,
                         Valor = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", item.Valor).Replace(";", ""),
-                        Imagem = "https://s2media.blob.core.windows.net/images/harry-potter-1.jpg"
+                        Imagem = item.Imagem,
+                        DataPublicacao = item.DataPublicacao
                     });
                 }
-
-                if (livros == null)
-                    return NotFound();
 
                 return Ok(lista);
             }
@@ -91,6 +93,7 @@ namespace Leituraria.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]

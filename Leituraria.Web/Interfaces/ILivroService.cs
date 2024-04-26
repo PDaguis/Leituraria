@@ -7,5 +7,7 @@ namespace Leituraria.Web.Interfaces
         Task<IEnumerable<LivroResult>>? GetLivros();
         Task<LivroResult>? GetById(int id);
         bool Excluir(int id);
+
+        bool Cadastrar(LivroResult livroResult);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using System.Text.Json.Serialization;
 
 namespace Leituraria.Web.DTO
 {
@@ -36,5 +37,7 @@ namespace Leituraria.Web.DTO
 
         [JsonPropertyName("imagem")]
         public string Imagem { get; set; }
+
+        public InputFile ImagemFile { get; set; }
     }
 }

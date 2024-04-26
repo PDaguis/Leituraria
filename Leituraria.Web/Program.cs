@@ -17,6 +17,7 @@ builder.Services.AddBlazorBootstrap();
 
 builder.Services.AddScoped(hc => new HttpClient { BaseAddress = new Uri(builder.Configuration["BaseAddress"]) });
 builder.Services.AddScoped<ILivroService, LivroService>();
+builder.Services.AddScoped<IAutorService, AutorService>();
 builder.Services.AddAuth0WebAppAuthentication(opt =>
 {
     opt.Domain = builder.Configuration["Auth0:Domain"];
