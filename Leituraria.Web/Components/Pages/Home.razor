@@ -1,0 +1,52 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Leituraria.Web.DTO;
+@inject Interfaces.ILivroService livroService;
+
+<PageTitle>Home</PageTitle>
+
+<h1>Bem vindo ao Leituraria!</h1>
+
+Sua biblioteca virtual a todo momento.
+
+@if (livros == null)
+{
+    <p><em>Carregando...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Quantidade de páginas</th>
+                <th>Valor</th>
+                <th>Imagem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var livro in livros)
+            {
+                <tr>
+                    <td>@livro.Titulo</td>
+                    <td>@livro.Descricao</td>
+                    <td>@livro.QuantidadePaginas</td>
+                    <td>@livro.Valor</td>
+                    <td><img src="@livro.Imagem" style="width:48px;height:48px;" /> </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<LivroResult> livros;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+
+        livros = await livroService.GetLivros();
+    }
+}

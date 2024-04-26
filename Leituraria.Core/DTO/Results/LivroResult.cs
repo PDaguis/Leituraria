@@ -18,7 +18,8 @@ namespace Leituraria.Core.DTO.Results
         public string Idioma { get; set; }
         public string Descricao { get; set; }
         public int QuantidadePaginas { get; set; }
-        public decimal Valor { get; set; }
+        public string Valor { get; set; }
+        public string Imagem { get; set; }
 
         public AutorResult Autor { get; set; }
         public int AutorId { get; set; }

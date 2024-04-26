@@ -40,7 +40,7 @@ namespace Leituraria.Infra.Repositories
                     {
                         Id = l.Id,
                         Titulo = l.Titulo,
-                        Valor = l.Valor,
+                        Valor = l.Valor.ToString(),
                         Autor = new AutorResult()
                         {
                             Id = l.Autor.Id,

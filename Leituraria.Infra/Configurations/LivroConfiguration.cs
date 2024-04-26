@@ -24,6 +24,7 @@ namespace Leituraria.Infra.Configurations
             builder.Property(x => x.Idioma).HasColumnType("VARCHAR(50)").IsRequired();
             builder.Property(x => x.Descricao).HasColumnType("VARCHAR(600)").IsRequired();
             builder.Property(x => x.QuantidadePaginas).HasColumnType("INT").IsRequired();
+            builder.Property(x => x.Imagem).HasColumnType("VARCHAR(600)");
             builder.Property(x => x.Valor).HasColumnType("MONEY");
             builder.HasOne(l => l.Autor)
                 .WithMany(a => a.Livros)

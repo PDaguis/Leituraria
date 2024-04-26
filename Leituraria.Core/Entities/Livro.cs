@@ -16,6 +16,7 @@ namespace Leituraria.Core.Entities
         public required string Descricao { get; set; }
         public required int QuantidadePaginas { get; set; }
         public required decimal Valor { get; set; }
+        public string? Imagem { get; set; }
 
         public virtual Autor Autor { get; set; }
         public int AutorId { get; set; }
